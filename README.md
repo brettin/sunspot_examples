@@ -2,9 +2,9 @@
 Some basic examples to get running on sunspot
 
 
-# mpiexec --np 12 gpu_tile_compact.sh python ./sunspot_train.py | grep ZE | sort
- 2>/dev/null
+`mpiexec --np 12 gpu_tile_compact.sh python ./sunspot_train.py | grep ZE | sort 2>/dev/null`
 
+```
 ZE_AFFINITY_MASK: 0.0
 ZE_AFFINITY_MASK: 0.1
 ZE_AFFINITY_MASK: 1.0
@@ -17,18 +17,23 @@ ZE_AFFINITY_MASK: 4.0
 ZE_AFFINITY_MASK: 4.1
 ZE_AFFINITY_MASK: 5.0                                                       ^C
 ZE_AFFINITY_MASK: 5.1
-  
-# mpiexec --np 6 ./gpu_tile_compact.sh python ./sunspot_train.py | grep ZE | sort 2>/dev/null
+```
 
+`mpiexec --np 6 ./gpu_tile_compact.sh python ./sunspot_train.py | grep ZE | sort 2>/dev/null`
+
+```
 ZE_AFFINITY_MASK: 0.0
 ZE_AFFINITY_MASK: 0.1
 ZE_AFFINITY_MASK: 1.0
 ZE_AFFINITY_MASK: 1.1
 ZE_AFFINITY_MASK: 2.0
 ZE_AFFINITY_MASK: 2.1
+```
 
 
-mpiexec --np 6 ./gpu_tile_compact.sh python ./sunspot_train.py --infile ./infiles
+`mpiexec --np 6 ./gpu_tile_compact.sh python ./sunspot_train.py --infile ./infiles`
+
+```
 WARNING:tensorflow:There are non-GPU devices in `tf.distribute.Strategy`, not using nccl allreduce.
 WARNING:tensorflow:There are non-GPU devices in `tf.distribute.Strategy`, not using nccl allreduce.
 WARNING:tensorflow:There are non-GPU devices in `tf.distribute.Strategy`, not using nccl allreduce.
@@ -83,3 +88,4 @@ None: Number of devices: 1
 5: defining and compiling model
 5: calling model.fit
 5: done calling model.fit
+```
