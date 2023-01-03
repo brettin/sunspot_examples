@@ -1,9 +1,7 @@
-#PBS -l walltime=00:05:00
-#PBS -l select=100:system=sunspot
-#PBS -l place=scatter
-#PBS -l filesystems=eagle:home
+#PBS -l select=1:system=sunspot
+#PBS -l walltime=30:00
 #PBS -N reg_go2
-#PBS -A CSC249ADOA01
+#PBS -A candle_aesp_CNDA 
 #PBS -q workq
 
 if [ -z "$arg1" ]; then
@@ -13,15 +11,7 @@ if [ -z "$arg1" ]; then
         exit
 fi
 
-arg2=$(arg2:-"1")
-
-SYSMON_CMD=/lus/gila/projects/candle_aesp_CNDA/software/tools/pti-gpu/tools/sysmon/build/sysmon
-function monitor_gpus {
-	while true ; do
-		${SYSMON_CMD}
-		sleep 10
-	done
-}
+arg2=${arg2:-"1"}
 
 # This should be the directory where qsub was executed
 # echo "PBS_O_WORKDIR: $PBS_O_WORKDIR"
@@ -40,11 +30,9 @@ module load oneapi/release/2022.10.15.003
 source $IDPROOT/etc/profile.d/conda.sh
 conda activate candle
 
-monitor_gpus &
-CHILD_PID=$!
 
 # passing it the file of filenames.
-# mpiexec --np 12 ./gpu_tile_compact.sh python ./sunspot_reg_go2.py --infile infiles --ep 2
-mpiexec -ppn 12 -n 1 $PBS_O_WORKDIR/sunspot_reg_go2.sh $arg1 $arg1
+echo "arg1 : $arg1"
+echo "arg2 : $arg2"
+mpiexec -np 12 $PBS_O_WORKDIR/sunspot_reg_go2.sh $arg1 $arg2
 
-kill $CHILD_PID
