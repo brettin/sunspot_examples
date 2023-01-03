@@ -1,5 +1,8 @@
 #!/bin/bash
 
+arg1=$1
+arg2=$2
+
 INFILE=$arg1
 EP=$arg2
 
@@ -12,9 +15,9 @@ function monitor_gpus {
 	done
 }
 
-monitor_gpus &
+monitor_gpus > ${PMIX_RANK}-sysmon.log &
 CHILD_PID=$!
 
-./gpu_tile_compact.sh python ./sunspot_reg_go2.py --infile $INFILES --ep $EP
+./gpu_tile_compact.sh python ./sunspot_reg_go2.py --infile $INFILE --ep $EP > ${PMIX_RANK}-output.txt 2>&1
 
 kill $CHILD_PID
