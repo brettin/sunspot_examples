@@ -1,5 +1,5 @@
 #PBS -l select=1:system=sunspot
-#PBS -l walltime=30:00
+#PBS -l walltime=2:00:00
 #PBS -N reg_go2
 #PBS -A candle_aesp_CNDA 
 #PBS -q workq
@@ -34,5 +34,5 @@ conda activate candle
 # passing it the file of filenames.
 echo "arg1 : $arg1"
 echo "arg2 : $arg2"
-mpiexec -np 12 $PBS_O_WORKDIR/sunspot_reg_go2.sh $arg1 $arg2
+mpiexec -ppn 12 -np 12 $PBS_O_WORKDIR/sunspot_reg_go2.sh $arg1 $arg2
 

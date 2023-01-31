@@ -35,7 +35,13 @@ def load_data_from_parquet(data_path):
     print("reading {}".format(data_path))
     df = pd.read_parquet(data_path)
     df_y = df['reg'].values.astype("float32")
-    df_x = df.iloc[:, 6:].values.astype("float32")
+    
+    # use for covid docking dataframes
+    # df_x = df.iloc[:, 6:].values.astype("float32")
+    
+    # use for cancer docking dataframes
+    df_x = df.iloc[:, 5:].values.astype("float32")
+
     print('df_y: {}'.format(df_y.shape))
     print('df_x: {}'.format(df_x.shape))
 

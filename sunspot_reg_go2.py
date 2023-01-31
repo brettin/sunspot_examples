@@ -1,4 +1,5 @@
 from data_loader import load_data_from_parquet
+from data_loader import load_data
 from tensorflow import keras
 
 from datetime import datetime as dt
@@ -26,6 +27,8 @@ import pandas as pd
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+# The model should not know about rank. Refactor
+# so that the specific infile is determined in bash.
 PMIX_RANK = os.getenv('PMIX_RANK')
 
 psr = argparse.ArgumentParser(description="input dataframe file")
@@ -60,12 +63,17 @@ def r2(y_true, y_pred):
 
 with open(args['infile']) as infile:
     lines = [line.rstrip() for line in infile]
+
+# Add a guard on index out of bounds.
 print("{}: infile={}".format(PMIX_RANK,
       lines[int(PMIX_RANK)]))
 
-
+# Add a guard on index out of bounds.
 X_train, Y_train, X_test, Y_test = load_data_from_parquet(
     lines[int(PMIX_RANK)])
+# X_train, Y_train, X_test, Y_test = load_data(
+#     lines[int(PMIX_RANK)])
+input_dim = X_train.shape[1]
 
 steps = X_train.shape[0]//GLOBAL_BATCH_SIZE
 validation_steps = X_test.shape[0]//GLOBAL_BATCH_SIZE
@@ -91,7 +99,7 @@ val_dist = strategy.experimental_distribute_dataset(val_ds)
 
 with strategy.scope():
     print("{}: defining and compiling model".format(PMIX_RANK))
-    inputs = Input(shape=(1826,))
+    inputs = Input(shape=(input_dim,))
     x = Dense(250, activation="relu")(inputs)
     x = Dropout(DR)(x)
     x = Dense(125, activation="relu")(x)
