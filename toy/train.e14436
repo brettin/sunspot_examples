@@ -1,0 +1,5 @@
+
+The following have been reloaded with a version change:
+  1) intel_compute_runtime/release/pvc-prq-66 => intel_compute_runtime/release/pvc-prq-29
+  2) oneapi/eng-compiler/2022.10.15.006 => oneapi/release/2022.10.15.003
+
