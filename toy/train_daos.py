@@ -4,13 +4,14 @@ import os
 ZE_AFFINITY_MASK =os.environ.get('ZE_AFFINITY_MASK')
 PMIX_RANK        =os.environ.get('PMIX_RANK')
 
-# mount a daos container. this assumes that the pool and container
-# already exists.
-DAOS_CONT=os.environ.get('DAOS_CONT') or DAOS_CONT="brettin_posix"
-DAOS_POOL=os.environ.get('DAOS_POOL') or DAOS_POOL="candle_aesp_CNDA"
+# mount a daos container. this assumes that the pool and container already
+# exists. you should set DAOS_CONT and DOAS_POOL environment variables.
+DAOS_CONT=os.environ('DAOS_CONT') if 'DAOS_CONT' in os.environ else "brettin_posix"
+DAOS_POOL=os.environ['DAOS_POOL'] if 'DAOS_POOL' in os.environ else "candle_aesp_CNDA"
 mount_point = os.path.join("/tmp", DAOS_POOL, DAOS_CONT)  # Replace with your mount point
+
 try:
-  os.system("daos container mount --pool=DAOS_POOL --cont=DAOS_CONT /mnt/daos")
+  os.system("daos container mount --pool=DAOS_POOL --cont=DAOS_CONT " + mount_point)
 except Exception as e:
   print(e)
 
